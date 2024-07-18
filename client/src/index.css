@@ -106,7 +106,7 @@ body {
   -o-border-radius: 0.25rem;
 }
 
-.noteCard:hover {
+.active {
   border: 1px solid gray;
 }
 

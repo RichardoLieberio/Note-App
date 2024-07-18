@@ -8,9 +8,9 @@ function notesReducer(state, action) {
             return action.payload;
         case "add-note":
             return [action.payload, ...state];
-        case "update-note":
-            const updatedNotes = state.filter(note => note._id !== action.payload._id);
-            return [action.payload, ...updatedNotes];
+        case "replace-note":
+            const updatedNotes = state.map(note => note._id === action.payload.oldNote._id ? action.payload.newNote : note);
+            return [...updatedNotes];
         case "delete-note":
             const deletedNotes = state.filter(note => note._id !== action.payload._id);
             return [...deletedNotes];

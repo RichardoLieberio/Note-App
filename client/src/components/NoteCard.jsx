@@ -1,9 +1,9 @@
 import { formatDistanceToNow } from "date-fns";
 
-function NoteCard({ note, methods }) {
+function NoteCard({ note, methods, active }) {
     return (
-        <div onClick={() => methods.changeFocusNote(note)} className="noteCard">
-            <span onClick={() => methods.deleteNote(note)} className="delete">x</span>
+        <div onClick={() => methods.changeNote(note)} className={active ? "noteCard active" : "noteCard"}>
+            <span onClick={(e) => methods.deleteNote(e, note)} className="delete">x</span>
             <div className="h3Div">
                 {
                     note.title
