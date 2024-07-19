@@ -28,30 +28,71 @@ body {
 
 .left {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: #ddd;
+}
+
+.leftHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.leftHeader div {
+  width: 100%;
+  display: table;
+  table-layout: fixed;
+}
+
+.leftHeader div h2,
+.leftHeader div small {
+  display: table-cell;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .addNote {
   width: 100%;
+  margin-top: 1rem;
 }
 
 .addNote,
 .saveNote {
   padding: 0.5rem;
   color: white;
-  background-color: green;
+  background-color: #0b57d0;
   border: 1px solid transparent;
-  border-radius: 0.25rem;
-  -webkit-border-radius: 0.25rem;
-  -moz-border-radius: 0.25rem;
-  -ms-border-radius: 0.25rem;
-  -o-border-radius: 0.25rem;
+  border-radius: 0.35rem;
+  -webkit-border-radius: 0.35rem;
+  -moz-border-radius: 0.35rem;
+  -ms-border-radius: 0.35rem;
+  -o-border-radius: 0.35rem;
+  cursor: pointer;
+}
+
+.logoutBtn {
+  padding: 0.5rem;
+  color: white;
+  background-color: rgb(167, 0, 0);
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+  -webkit-border-radius: 0.35rem;
+  -moz-border-radius: 0.35rem;
+  -ms-border-radius: 0.35rem;
+  -o-border-radius: 0.35rem;
   cursor: pointer;
 }
 
 .addNote:hover,
 .saveNote:hover {
-  background-color: rgb(0, 170, 0);
+  background-color: rgb(63, 118, 208);
+  border: 1px solid gray;
+}
+
+.logoutBtn:hover {
+  background-color: rgb(167, 30, 30);
   border: 1px solid gray;
 }
 
@@ -99,11 +140,11 @@ body {
   position: relative;
   background-color: white;
   border: 1px solid transparent;
-  border-radius: 0.25rem;
-  -webkit-border-radius: 0.25rem;
-  -moz-border-radius: 0.25rem;
-  -ms-border-radius: 0.25rem;
-  -o-border-radius: 0.25rem;
+  border-radius: 0.35rem;
+  -webkit-border-radius: 0.35rem;
+  -moz-border-radius: 0.35rem;
+  -ms-border-radius: 0.35rem;
+  -o-border-radius: 0.35rem;
 }
 
 .active {
@@ -154,6 +195,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-shadow: 0 0 0.25rem gray;
+  -webkit-clip-path: inset(-0.25rem 0px -0.25rem -0.25rem);
+  clip-path: inset(-0.25rem 0px -0.25rem -0.25rem);
 }
 
 .rightHeader {
@@ -189,4 +233,289 @@ body {
 .editNote {
   flex: 1;
   font-size: 1rem;
+}
+
+.login,
+.register {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background-color: #ddd;
+}
+
+.loginForm,
+.registerForm {
+  width: 40ch;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 0 0.25rem gray;
+  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+}
+
+.inputSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputContainer {
+  width: 100%;
+}
+
+.inputBox {
+  position: relative;
+}
+
+.inputField {
+  width: 100%;
+  padding: 1rem 1rem;
+  font-size: 1rem;
+  border: 1px solid gray;
+  cursor: text;
+  border-radius: 0.35rem;
+  -webkit-border-radius: 0.35rem;
+  -moz-border-radius: 0.35rem;
+  -ms-border-radius: 0.35rem;
+  -o-border-radius: 0.35rem;
+}
+
+.inputField:focus {
+  outline: 1px solid #0b57d0;
+}
+
+.inputField:disabled {
+  cursor: default;
+}
+
+.pwd {
+  padding-right: 3.2rem;
+}
+
+.inputLabel {
+  padding: 0 0.3rem;
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  cursor: text;
+  background-color: white;
+  transition: 0.15s;
+  -webkit-transition: 0.15s;
+  -moz-transition: 0.15s;
+  -ms-transition: 0.15s;
+  -o-transition: 0.15s;
+}
+
+.inputLabel.on {
+  color: #0b57d0;
+}
+
+.inputLabel.top {
+  top: -0.1rem;
+  left: 0.8rem;
+  font-size: 0.8rem;
+}
+
+.showPwd,
+.hidePwd {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  font-size: 1.3rem;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+}
+
+.formFooter .link {
+  text-decoration: none;
+  color: #0b57d0;
+  cursor: pointer;
+}
+
+.formFooter .link:hover {
+  text-decoration: underline;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: left;
+  font-size: 0.8rem;
+  color: red;
+}
+
+.error svg {
+  flex-shrink: 0;
+}
+
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+  .rememberMe input[type=checkbox] {
+    --active: #0b57d0;
+    --active-inner: #fff;
+    --focus: 2px rgba(39, 94, 254, .3);
+    --border: #BBC1E1;
+    --border-hover: #0b57d0;
+    --background: #fff;
+    --disabled: #F6F8FF;
+    --disabled-inner: #E1E6F9;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 21px;
+    outline: none;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--bc, var(--border));
+    background: var(--b, var(--background));
+    transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+  }
+  .rememberMe input[type=checkbox]:after {
+    content: "";
+    display: block;
+    left: 0;
+    top: 0;
+    position: absolute;
+    transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+  }
+  .rememberMe input[type=checkbox]:checked {
+    --b: var(--active);
+    --bc: var(--active);
+    --d-o: .3s;
+    --d-t: .6s;
+    --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+  }
+  .rememberMe input[type=checkbox]:disabled {
+    --b: var(--disabled);
+    cursor: default;
+    opacity: 0.9;
+  }
+  .rememberMe input[type=checkbox]:disabled:checked {
+    --b: var(--disabled-inner);
+    --bc: var(--border);
+  }
+  .rememberMe input[type=checkbox]:disabled + label {
+    cursor: default;
+  }
+  .rememberMe input[type=checkbox]:hover:not(:checked):not(:disabled) {
+    --bc: var(--border-hover);
+  }
+  .rememberMe input[type=checkbox]:focus {
+    box-shadow: 0 0 0 var(--focus);
+  }
+  .rememberMe input[type=checkbox]:not(.switch) {
+    width: 21px;
+  }
+  .rememberMe input[type=checkbox]:not(.switch):after {
+    opacity: var(--o, 0);
+  }
+  .rememberMe input[type=checkbox]:not(.switch):checked {
+    --o: 1;
+  }
+  .rememberMe input[type=checkbox] + label {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+
+  .rememberMe input[type=checkbox]:not(.switch) {
+    border-radius: 0.35rem;
+    -webkit-border-radius: 0.35rem;
+    -moz-border-radius: 0.35rem;
+    -ms-border-radius: 0.35rem;
+    -o-border-radius: 0.35rem;
+}
+  .rememberMe input[type=checkbox]:not(.switch):after {
+    width: 5px;
+    height: 9px;
+    border: 2px solid var(--active-inner);
+    border-top: 0;
+    border-left: 0;
+    left: 7px;
+    top: 4px;
+    transform: rotate(var(--r, 20deg));
+  }
+  .rememberMe input[type=checkbox]:not(.switch):checked {
+    --r: 43deg;
+  }
+}
+
+.rememberMe * {
+  box-sizing: inherit;
+}
+.rememberMe *:before,
+.rememberMe *:after {
+  box-sizing: inherit;
+}
+
+.loginBtn,
+.registerBtn {
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #0b57d0;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 100%;
+  height: 44px;
+  line-height: 1.15;
+  outline: none;
+  overflow: hidden;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transform: translateZ(0);
+  transition: all .2s,box-shadow .08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  border-radius: 0.35rem;
+  -webkit-border-radius: 0.35rem;
+  -moz-border-radius: 0.35rem;
+  -ms-border-radius: 0.35rem;
+  -o-border-radius: 0.35rem;
+}
+
+.loginBtn:hover,
+.registerBtn:hover {
+  background-color: rgb(63, 118, 208);
+}
+
+.loginBtn:disabled,
+.registerBtn:disabled {
+  cursor: default;
+  background-color: rgb(63, 118, 208);
+}
+
+.loginBtn:focus,
+.registerBtn:focus {
+  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }

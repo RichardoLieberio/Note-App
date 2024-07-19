@@ -1,5 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "./useAuthContext";
 import { useNotesContext } from "./useNotesContext";
 
 function useMainController() {
@@ -9,6 +11,8 @@ function useMainController() {
     const [note, setNote] = useState("");
     const timer = useRef(null);
     const { state, dispatch } = useNotesContext();
+    const { state: token, dispatch: tokenDispatch } = useAuthContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchAllNotes();
@@ -33,11 +37,17 @@ function useMainController() {
 
     async function fetchAllNotes() {
         try {
-            const response = await fetch("http://localhost:4000/api/notes");
+            const response = await fetch("http://localhost:4000/api/notes", {
+                headers: {"Authorization": `Bearer ${token}`}
+            });
             if (response.ok) {
                 const allNotes = await response.json();
-                dispatch({type: "set-notes", payload: allNotes.allNotes});
-                allNotes.allNotes.length && setFocusNote(allNotes.allNotes[0]);
+                if (allNotes.allNotes) {
+                    dispatch({type: "set-notes", payload: allNotes.allNotes});
+                    allNotes.allNotes.length && setFocusNote(allNotes.allNotes[0]);
+                } else if (allNotes.error) {
+                    logout();
+                }
             } else {
                 throw new Error("Failed to fetch all notes");
             }
@@ -117,10 +127,17 @@ function useMainController() {
 
     async function deleteNoteApi(deleteNote) {
         try {
-            const response = await fetch(`http://localhost:4000/api/notes/${deleteNote._id}`, {method: "DELETE"});
+            const response = await fetch(`http://localhost:4000/api/notes/${deleteNote._id}`, {
+                method: "DELETE",
+                headers: {"Authorization": `Bearer ${token}`}
+            });
             if (response.ok) {
                 const deletedNote = await response.json();
-                dispatch({type: "delete-note", payload: deletedNote.deletedNote});
+                if (deletedNote.deletedNote) {
+                    dispatch({type: "delete-note", payload: deletedNote.deletedNote});
+                } else if (deletedNote.error) {
+                    logout();
+                }
             } else {
                 throw new Error("Failed to delete note");
             }
@@ -133,13 +150,20 @@ function useMainController() {
         try {
             const response = await fetch(`http://localhost:4000/api/notes/${focusNote._id}`, {
                 method: "PATCH",
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({title, note})
             });
             if (response.ok) {
                 const updatedNote = await response.json();
-                dispatch({type: "replace-note", payload: {newNote: updatedNote.updatedNote, oldNote}});
-                updateFocusNote && setFocusNote(updatedNote.updatedNote);
+                if (updatedNote.updatedNote) {
+                    dispatch({type: "replace-note", payload: {newNote: updatedNote.updatedNote, oldNote}});
+                    updateFocusNote && setFocusNote(updatedNote.updatedNote);
+                } else if (updatedNote.error) {
+                    logout();
+                }
             } else {
                 throw new Error("Failed to save note");
             }
@@ -152,17 +176,24 @@ function useMainController() {
         try {
             const response = await fetch("http://localhost:4000/api/notes", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify({title, note})
             });
             if (response.ok) {
                 const newNote = await response.json();
-                if (oldNote) {
-                    dispatch({type: "replace-note", payload: {newNote: newNote.newNote, oldNote}});
-                } else {
-                    dispatch({type: "add-note", payload: newNote.newNote});
+                if (newNote.newNote) {
+                    if (oldNote) {
+                        dispatch({type: "replace-note", payload: {newNote: newNote.newNote, oldNote}});
+                    } else {
+                        dispatch({type: "add-note", payload: newNote.newNote});
+                    }
+                    updateFocusNote && setFocusNote(newNote.newNote);
+                } else if (newNote.error) {
+                    logout();
                 }
-                updateFocusNote && setFocusNote(newNote.newNote);
             } else {
                 throw new Error("Failed to create new note");
             }
@@ -172,7 +203,7 @@ function useMainController() {
     }
 
     function autosave() {
-        if (state.length && (focusNote.title !== title || focusNote.note !== note)) {
+        if (state && state.length && (focusNote.title !== title || focusNote.note !== note)) {
             if (isNewNote) {
                 saveNewNote(true, focusNote);
                 setIsNewNote(false);
@@ -190,10 +221,24 @@ function useMainController() {
         setNote(e.target.value);
     }
 
+    function logout() {
+        setIsNewNote(false);
+        setFocusNote(null);
+        setTitle("");
+        setNote("");
+        clearTimeout(timer.current);
+        localStorage.removeItem("token");
+        dispatch({type: "empty-notes", payload: []});
+        tokenDispatch({type: "logout", payload: {}});
+        navigate("/login");
+    }
+
     return {
-        focusNote,
-        title,
-        note,
+        setIsNewNote,
+        focusNote, setFocusNote,
+        title, setTitle,
+        note, setNote,
+        timer,
         titleHandler, noteHandler,
         addNote, saveNote, changeNote, deleteNote
     };

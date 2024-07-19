@@ -14,13 +14,15 @@ function notesReducer(state, action) {
         case "delete-note":
             const deletedNotes = state.filter(note => note._id !== action.payload._id);
             return [...deletedNotes];
+        case "empty-notes":
+            return null;
         default:
             return state;
     }
 }
 
 function NotesContextProvider({ children }) {
-    const [state, dispatch] = useReducer(notesReducer, []);
+    const [state, dispatch] = useReducer(notesReducer, null);
 
     return (
         <NotesContext.Provider value={{state, dispatch}} >

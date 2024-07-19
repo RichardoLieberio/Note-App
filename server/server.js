@@ -1,8 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const notesRouter = require("./routes/notes");
+const userRouter = require("./routes/user");
 
 mongoose.connect("mongodb://localhost:27017/NotesV2")
     .then(function() {
@@ -19,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/notes", notesRouter);
+app.use("/api/user", userRouter);
 
 app.listen(4000, function() {
     console.log("Listening on port 4000");
